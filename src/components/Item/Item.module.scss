@@ -1,3 +1,6 @@
+@import '../../assets/styles/_config.scss';
+
+
 .item_data {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -5,16 +8,18 @@
   }
   
   .item {
-    color: #000000;
-    border-bottom: 1px solid #C4C4C0;
+    color: $color-neutral-dark;
+    border-bottom: 1px solid $color-neutral-light;
   }
+  
   
   .item_amount, .item_timespan, .item_average {
     text-align: right;
   } 
   
   .item_type, .item_amount {
-    color: #000000;
+    color: $color-neutral-darkest;
     font-weight: bold;
   }
+  
   
