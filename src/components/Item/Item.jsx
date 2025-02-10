@@ -1,4 +1,6 @@
 import styles from './Item.module.scss'
+import { MdNavigateNext } from 'react-icons/md'
+
 
   
 
@@ -13,8 +15,11 @@ function Item() {
                 <div className={styles.item_timespan}>1.12.2022 - 28.2.2023</div>
                 <div className={styles.item_average}>45min</div>
               </div>
-            </div>
-          )
+              <div className={styles.item_edit}>
+        <MdNavigateNext />
+      </div>
+    </div>
+  )
     
   }
   
