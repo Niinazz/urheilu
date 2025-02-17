@@ -5,7 +5,7 @@ import ItemForm from '../ItemForm/ItemForm'
 function AddItem(props) {
 
   return (
-    <div>
+    <div className={styles.additem}>
       <h2>Uuden urheilumerkinnän lisääminen</h2>
       <ItemForm />
     </div> 
