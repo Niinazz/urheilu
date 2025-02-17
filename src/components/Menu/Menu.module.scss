@@ -3,18 +3,24 @@
 
 .menu {
     background-color: $color-neutral-darker;
+    border-block-start-style: solid;
+    border-block-start-color: rgb(253, 179, 231);
+    border-block-start-width: 20px;
     color: $color-neutral-lighter;
     max-height: 5rem;
-    min-height: 4rem;
-    font-size: 4rem;
+    min-height: 5rem;
+    font-size: 4em;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
+   
+
   }
   
   .menu > div {
     display: flex;
     align-items: center;
+    
   }
   
   .menu a {
