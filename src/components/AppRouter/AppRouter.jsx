@@ -23,7 +23,9 @@ function AppRouter(props) {
           element: <Items />, 
           loader: () => { return props.data } },
         { path: "stats", element: <Stats /> },
-        { path: "settings", element: <Settings /> },
+        { path: "settings", 
+          element: <Settings typelist={props.typelist} /> },
+
         { path: "add", 
           element: <AddItem onItemSubmit={props.onItemSubmit} 
                             typelist={props.typelist} /> },
