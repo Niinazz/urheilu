@@ -2,14 +2,14 @@
 
 
 .menu {
-    background-color: $color-neutral-darker;
+    background-color: rgb(189, 160, 235);
     border-block-start-style: solid;
     border-block-start-color: rgb(253, 179, 231);
     border-block-start-width: 20px;
     color: $color-neutral-lighter;
-    max-height: 5rem;
-    min-height: 5rem;
-    font-size: 4em;
+    max-height: 5.4rem;
+    min-height: 5.4rem;
+    font-size: 3.4em;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
@@ -24,10 +24,10 @@
   }
   
   .menu a {
-    color: $color-neutral-light;
+    color: rgb(82, 32, 79);
   
     &:global.active {
-      color: $color-neutral-lightest;
+      color: rgb(255, 27, 217);
     }
   }
   
