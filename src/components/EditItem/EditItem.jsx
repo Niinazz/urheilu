@@ -11,7 +11,9 @@ function EditItem(props) {
   return (
     <div className={styles.edititem}>
       <h2>Muokkaa merkintää</h2>
-      <ItemForm onItemSubmit={props.onItemSubmit} formData={data.item} />
+      <ItemForm onItemSubmit={props.onItemSubmit} 
+                onItemDelete={props.onItemDelete} 
+                formData={data.item} />
     </div>
   )
 

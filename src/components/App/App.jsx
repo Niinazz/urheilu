@@ -8,6 +8,14 @@ function App() {
 
   const [data, setData] = useState(testdata)
 
+  const handleItemDelete = (id) => {
+    let copy = data.slice()
+    copy = copy.filter(item => item.id !== id)
+    setData(copy)
+  }
+
+
+
   const handleItemSubmit = (newitem) => {
     let copy = data.slice()
 
@@ -30,7 +38,9 @@ function App() {
 
   return (
     <>
-                   <AppRouter data={data} onItemSubmit={handleItemSubmit} />  
+                        <AppRouter data={data} 
+                 onItemSubmit={handleItemSubmit} 
+                 onItemDelete={handleItemDelete} />
 
 
 
