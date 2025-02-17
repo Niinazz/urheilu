@@ -7,7 +7,7 @@ function AddItem(props) {
   return (
     <div className={styles.additem}>
       <h2>Uuden urheilumerkinnän lisääminen</h2>
-      <ItemForm />
+      <ItemForm onItemSubmit={props.onItemSubmit} />
     </div> 
   )
 
