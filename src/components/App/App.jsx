@@ -6,6 +6,13 @@ import { useState } from 'react'
 
 function App() {
 
+  const handleTypeSubmit = (type) => {
+    let copy = typelist.slice()
+    copy.push(type)
+    copy.sort()
+    setTypelist(copy)
+  }
+
   const [data, setData] = useState(testdata)
 
   const [typelist, setTypelist] = useState(["Juoksu", "Uinti", "Kuntosali", "Kävely", "Jumppa"])
@@ -41,10 +48,13 @@ function App() {
 
   return (
     <>
-                              <AppRouter data={data}
+                                   <AppRouter data={data}
                  typelist={typelist}
                  onItemSubmit={handleItemSubmit}
-                 onItemDelete={handleItemDelete} />
+                 onItemDelete={handleItemDelete}
+                 onTypeSubmit={handleTypeSubmit} />
+```'
+
 
 
 
