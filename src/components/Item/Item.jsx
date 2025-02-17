@@ -3,17 +3,16 @@ import { MdNavigateNext } from 'react-icons/md'
 
 
   
-
-function Item() {
+function Item({data, ...props}) {
 
         return (
             <div className={styles.item}>
               <div className={styles.item_data}>
-                <div className={styles.item_type}>Juoksu</div>
-                <div className={styles.item_amount}>45min</div>
-                <div className={styles.item_date}>20.3.2023</div>
-                <div className={styles.item_timespan}>1.12.2022 - 28.2.2023</div>
-                <div className={styles.item_average}>45min</div>
+              <div className={styles.item_type}>{data.type}</div>
+              <div className={styles.item_amount}>{data.amount} min</div>
+              <div className={styles.item_date}>{data.Date}</div>
+              <div className={styles.item_timespan}>{data.periodStart} - {data.periodEnd}</div>
+              <div className={styles.item_average}>min/kk</div>
               </div>
               <div className={styles.item_edit}>
         <MdNavigateNext />
