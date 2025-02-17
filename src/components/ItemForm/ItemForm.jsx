@@ -53,10 +53,10 @@ function ItemForm(props) {
             <div>
             <label htmlFor='type'>Urheilutyyppi</label>
             <select name='type' onChange={handleChange} value={values.type}>
-                <option>Juoksu</option>
-                <option>Uinti</option>
-                <option>Kuntosali</option>
-                <option>Kävely</option>
+                <option value="">(valitse)</option>
+                { props.typelist.map(
+                  type => <option key={type}>{type}</option>
+                )}
               </select>
 
             </div>
@@ -93,7 +93,8 @@ function ItemForm(props) {
                       type='submit'>
                 { props.formData ? "TALLENNA" : "LISÄÄ" }
               </Button>
-              
+              </div>
+</div>
               { props.onItemDelete ? 
             <div className={styles.itemform_row}>
               <div>
@@ -104,13 +105,12 @@ function ItemForm(props) {
             : null }
 
         </div>
-        </div>
-        </div>
+        
         </form>
-
     </div>
   )
 
 }
 
 export default ItemForm
+

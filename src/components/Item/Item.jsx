@@ -9,9 +9,10 @@ function Item({data, ...props}) {
   const locale = "fi-FI"
   const sportDate = new Date(data.Date).toLocaleDateString(locale)
 
-  const numberFormat = new Intl.NumberFormat
+  const numberFormat = new Intl.NumberFormat(locale, { options: 'numeric', numeric: 'minute' })
   const amount = numberFormat.format(data.amount)
 
+  
 
 
   let average
@@ -33,7 +34,7 @@ function Item({data, ...props}) {
               <div className={styles.item_amount}>{amount}</div>
               <div className={styles.item_date}>{sportDate}</div>
               <div className={styles.item_timespan}>{period}</div>
-              <div className={styles.item_average}>{average ? average + "min/kk" : ""}</div>
+              <div className={styles.item_average}>{average ? average + "/kk" : ""}</div>
               </div>
               <div className={styles.item_edit}>
         <Link to={"/edit/" + data.id}><MdNavigateNext /></Link>
