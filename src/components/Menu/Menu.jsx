@@ -13,7 +13,8 @@ function Menu() {
   return (
     
     <div className={styles.menu}>
-    <div><NavLink to="/menu"><TbAdjustmentsHeart/></NavLink></div>
+    
+    <div><NavLink to="/menu"><TbAdjustmentsHeart /></NavLink></div>
     <div><NavLink to="/stats"><IoStatsChart/></NavLink></div>
     <div><NavLink to="/settings"><MdSettingsSuggest/></NavLink></div>
   </div>

@@ -15,7 +15,7 @@ function Root() {
           <Content>
             <Outlet />
           </Content>
-          <Menu />
+        <Menu/>
         </div>
       </ButtonContainer>
     </div>

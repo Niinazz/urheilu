@@ -15,8 +15,8 @@ function Settings(props) {
 
   return (
     <div className={styles.settings}>
-      <h2>Asetukset</h2>
-      <h3>Kulutyypit</h3>
+      <h2>Lisää uusia</h2>
+      <h3>✦ Urheilutyyppejä ✦</h3>
       <div className={styles.settings_types}>
         { props.typelist.map(
             type => <div key={type}>{type}</div>

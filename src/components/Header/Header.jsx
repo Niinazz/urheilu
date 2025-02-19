@@ -6,7 +6,7 @@ function Header() {
 
   return (
     <div className={styles.header}>
-      Urheilupäiväkirja
+     ✦ Urheilupäiväkirja ✦
     </div>
   )
 

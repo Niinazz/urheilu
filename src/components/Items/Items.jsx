@@ -14,7 +14,7 @@ function Items() {
   return (
     <div className={styles.items}>
       { items }
-      <Link to="/add"><FloatingButton secondary>☽+☾</FloatingButton></Link>
+      <Link to="/add"><FloatingButton secondary>✚</FloatingButton></Link>
     </div>
   )
 

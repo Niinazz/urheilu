@@ -1,11 +1,14 @@
 import AppRouter from '../AppRouter'
-import testdata from './testdata.js'
+import testdata from './testdata.js';
 import { useState } from 'react'
-
-
 
 function App() {
 
+  const [data, setData] = useState(testdata);
+
+  console.log(data);
+
+  
   const handleTypeSubmit = (type) => {
     let copy = typelist.slice()
     copy.push(type)
@@ -13,18 +16,16 @@ function App() {
     setTypelist(copy)
   }
 
-  const [data, setData] = useState(testdata)
 
-  const [typelist, setTypelist] = useState(["Juoksu", "Uinti", "Kuntosali", "Kävely", "Jumppa"])
+  
 
+  const [typelist, setTypelist] = useState(["Juoksu", "Uinti", "Kuntosali", "Kävely", "Jumppa"]);
 
   const handleItemDelete = (id) => {
     let copy = data.slice()
     copy = copy.filter(item => item.id !== id)
     setData(copy)
   }
-
-
 
   const handleItemSubmit = (newitem) => {
     let copy = data.slice()
@@ -36,7 +37,7 @@ function App() {
       copy.push(newitem)
     }
 
-    copy.sort( (a,b) => {
+    copy.sort((a, b) => {
       const aDate = new Date(a.Date)
       const bDate = new Date(b.Date)
       return bDate - aDate
@@ -44,24 +45,18 @@ function App() {
     setData(copy)
   }
 
-
-
   return (
     <>
-                                   <AppRouter data={data}
-                 typelist={typelist}
-                 onItemSubmit={handleItemSubmit}
-                 onItemDelete={handleItemDelete}
-                 onTypeSubmit={handleTypeSubmit} />
-```'
-
-
-
-
+      <AppRouter 
+        data={data} 
+        typelist={typelist} 
+        onItemSubmit={handleItemSubmit} 
+        onItemDelete={handleItemDelete} 
+        onTypeSubmit={handleTypeSubmit} 
+      />
     </>
   )
 }
 
 export default App
-
 
