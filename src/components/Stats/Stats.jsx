@@ -1,15 +1,10 @@
 import styles from './Stats.module.scss';
-import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis, PieChart, Pie, Cell, LabelList, Legend } from 'recharts';
+import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis, PieChart, Pie, Cell, Legend } from 'recharts';
+import randomColor from 'randomcolor';  // Lisää randomcolor-tuonti
 
 function Stats(props) {
   const { data } = props;
   const locale = "fi-FI";
-
-  // Määritellään numberFormat
-  const numberFormat = new Intl.NumberFormat('fi-FI', {
-    style: 'currency',
-    currency: 'EUR',
-  });
 
   // Linedata
   const linedata = data ? data.map((item) => ({
@@ -33,8 +28,28 @@ function Stats(props) {
     value: sportTypes[type],
   }));
 
-  // Värit ympyräkaavioon
-  const colors = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#FF6666', '#66FF99'];
+  // Lasketaan kaikkien suoritusten yhteiset minuutit
+  const totalMinutes = data.reduce((acc, item) => {
+    const duration = item.duration || item.amount;
+    return acc + duration;
+  }, 0);
+
+  // Asetetaan yhteinen minuuttiluku toinen ympyräkaavio
+  const totalMinutesData = [{
+    name: "Kaikki suoritukset",
+    value: totalMinutes,
+  }];
+
+  // Värit
+  const pieColors = randomColor({
+    count: pieData.length,
+    luminosity: 'dark',  // Tummat värit ensimmäiselle diagrammille
+  });
+
+  const pastelPieColors = randomColor({
+    count: totalMinutesData.length,
+    luminosity: 'light',  // Pastellivärit toiselle diagrammille
+  });
 
   // Formatteri minuutteja ja tunteja varten
   const minuteFormatter = new Intl.NumberFormat('fi', {
@@ -56,33 +71,41 @@ function Stats(props) {
   };
 
   return (
-    <div>
-      <h2>Tilastot</h2>
+    <div className={styles.statsContainer}>
+      <h2 className={styles.title}>✦ Tilastot ✦</h2>
 
       {/* Line Chart */}
       <ResponsiveContainer height={350}>
         <LineChart data={linedata}>
-          <Line dataKey="duration" />
-          <XAxis
-            type="number"
-            dataKey="date"
-            domain={['dataMin', 'dataMax']}
+          <Line 
+            type="monotone"
+            dataKey="duration"
+            stroke="#FF6347"  // Viivan väri
+            strokeWidth={3}   // Viivan paksuus
+            dot={{ r: 5, fill: '#FF6347' }}  // Pisteet viivalla
+            strokeDasharray="5 5"  // Katkoviiva
+            activeDot={{ r: 8, fill: '#FF6347' }} // Aktiiviset pisteet
+          />
+          <XAxis 
+            type="number" 
+            dataKey="date" 
+            domain={['dataMin', 'dataMax']} 
             tickFormatter={(value) => new Date(value).toLocaleDateString('fi-FI')}
           />
           <YAxis />
-          <Tooltip
+          <Tooltip 
             labelFormatter={(value) => new Date(value).toLocaleDateString('fi-FI')}
             formatter={(value) => {
               const formattedDuration = formatDuration(value);
-              return [formattedDuration, `${formattedDuration}`];
+              return [formattedDuration, formattedDuration];
             }}
           />
         </LineChart>
       </ResponsiveContainer>
 
-      {/* Pie Chart */}
-      <h3>Urheilulajit ja suoritusten määrä</h3>
-      <ResponsiveContainer width="100%" height={300}>
+      {/* Pie Chart for Sport Types */}
+      <h3 className={styles.pieTitle}>✦ Harrastamasi urheilulajit ja niiden kertamäärät ✦</h3>
+      <ResponsiveContainer width="100%" height={300} className={styles.pieChart}>
         <PieChart>
           <Pie
             data={pieData}
@@ -92,28 +115,61 @@ function Stats(props) {
             fill="#8884d8"
             label
           >
-            {pieData.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+            {/* Asetetaan tummat värit */}
+            {pieColors.map((color, index) => (
+              <Cell key={color} fill={color} />
             ))}
           </Pie>
           <Legend />
-          <Tooltip formatter={value => numberFormat.format(value)} />
+          <Tooltip
+            labelFormatter={(value) => value}  // Näyttää nimikentän (esim. "Kuntosali")
+            formatter={(value, name, props) => {
+              if (props.payload && props.payload.length > 0) {
+                const type = props.payload[0].name; // Lajin nimi
+                const amount = value; // Tämä on numero, ei rahasymboli
+                return [`${type}: ${amount}`];  // Muotoillaan tooltipin sisältö ilman rahasymbolia
+              }
+              return [`${name}: ${value}`];  // Palautetaan oletus formatter
+            }}
+          />
+        </PieChart>
+      </ResponsiveContainer>
+
+      {/* Pie Chart for Total Minutes */}
+      <h3 className={styles.pieTitle}>✦ Urheiluun käyttämäsi aika yhteensä ✦</h3>
+      <ResponsiveContainer width="100%" height={300} className={styles.pieChart}>
+        <PieChart>
+          <Pie
+            data={totalMinutesData}
+            dataKey="value"
+            nameKey="name"
+            outerRadius={100}
+            fill="#8884d8"
+            label
+          >
+            {/* Asetetaan pastellivärit */}
+            {pastelPieColors.map((color, index) => (
+              <Cell key={color} fill={color} />
+            ))}
+          </Pie>
+          <Legend />
+          <Tooltip
+            labelFormatter={(value) => value}  // Näyttää nimikentän (esim. "Kaikki suoritukset")
+            formatter={(value) => [`Yhteensä: ${value} minuuttia`]}  // Näytetään yhteinen minuuttiluku
+          />
         </PieChart>
       </ResponsiveContainer>
 
       {/* Lajit listattuna */}
-      <div>
-        <h3>Urheilulajit ja suoritusten määrä</h3>
-        <ul>
-          {pieData.map((entry, index) => (
-            <li key={index}>{entry.name}: {entry.value} suoritusta</li>
-          ))}
-        </ul>
+      <div className={styles.listContainer}>
+        
       </div>
     </div>
   );
 }
 
 export default Stats;
+
+
 
 

@@ -38,7 +38,10 @@ function Item({ data, ...props }) {
     <div className={styles.item}>
       <div className={styles.item_data}>
         <div className={styles.item_type}>{data.type}</div>
-        <div className={styles.item_date}>{sportDate}</div>
+        <div className={styles.item_date}>
+          <div className={styles.date_header}>Suorituspäivä</div>
+          <div>{sportDate}</div>
+        </div>
         <div className={styles.item_duration}>{duration}</div> {/* Kesto näyttöön */}
       </div>
       <div className={styles.item_edit}>

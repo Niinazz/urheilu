@@ -4,6 +4,7 @@
 .itemform {
     display: flex;
     flex-direction: column;
+    
   }
   
   .itemform_row {
@@ -26,8 +27,13 @@
     outline: none;
   }
   
+  
   .itemform label {
-    font-size: 0.8rem;
+    font-size: 1.1rem;
+    font-weight: bold;
     margin-bottom: 0.3rem;
+
   }
+
+ 
   
