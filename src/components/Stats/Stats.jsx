@@ -1,6 +1,6 @@
 import styles from './Stats.module.scss';
 import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis, PieChart, Pie, Cell, Legend } from 'recharts';
-import randomColor from 'randomcolor';  // Lisää randomcolor-tuonti
+import randomColor from 'randomcolor';  
 
 function Stats(props) {
   const { data } = props;
@@ -40,7 +40,7 @@ function Stats(props) {
     value: totalMinutes,
   }];
 
-  // Värit
+  
   const pieColors = randomColor({
     count: pieData.length,
     luminosity: 'dark',  // Tummat värit ensimmäiselle diagrammille
@@ -126,7 +126,7 @@ function Stats(props) {
             formatter={(value, name, props) => {
               if (props.payload && props.payload.length > 0) {
                 const type = props.payload[0].name; // Lajin nimi
-                const amount = value; // Tämä on numero, ei rahasymboli
+                const amount = value;
                 return [`${type}: ${amount}`];  // Muotoillaan tooltipin sisältö ilman rahasymbolia
               }
               return [`${name}: ${value}`];  // Palautetaan oletus formatter
@@ -135,7 +135,7 @@ function Stats(props) {
         </PieChart>
       </ResponsiveContainer>
 
-      {/* Pie Chart for Total Minutes */}
+      
       <h3 className={styles.pieTitle}>✦ Urheiluun käyttämäsi aika yhteensä ✦</h3>
       <ResponsiveContainer width="100%" height={300} className={styles.pieChart}>
         <PieChart>
@@ -147,7 +147,7 @@ function Stats(props) {
             fill="#8884d8"
             label
           >
-            {/* Asetetaan pastellivärit */}
+           
             {pastelPieColors.map((color, index) => (
               <Cell key={color} fill={color} />
             ))}
