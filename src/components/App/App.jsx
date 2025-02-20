@@ -1,12 +1,13 @@
 import AppRouter from '../AppRouter'
-import testdata from './testdata.js';
 import { useState } from 'react'
+import useLocalStorage from '../../shared/uselocalstorage'
+
 
 function App() {
 
-  const [data, setData] = useState(testdata);
+  const [data, setData] = useLocalStorage('urheilu-data',[])
+  const [typelist, setTypelist] = useLocalStorage('urheilu-typelist',[])
 
-  console.log(data);
 
   
   const handleTypeSubmit = (type) => {
@@ -15,11 +16,6 @@ function App() {
     copy.sort()
     setTypelist(copy)
   }
-
-
-  
-
-  const [typelist, setTypelist] = useState(["Juoksu", "Uinti", "Kuntosali", "Kävely", "Jumppa"]);
 
   const handleItemDelete = (id) => {
     let copy = data.slice()
