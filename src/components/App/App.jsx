@@ -1,58 +1,60 @@
 import AppRouter from '../AppRouter'
-import { useState } from 'react'
+import { useEffect } from 'react'
 import useLocalStorage from '../../shared/uselocalstorage'
+import firebase from './firebase.js'
+import { collection, getFirestore, onSnapshot } from 'firebase/firestore'
 
+const App = () => {
+  const [data, setData] = useLocalStorage('urheilu-data', [])
+  const [typelist, setTypelist] = useLocalStorage('urheilu-typelist', [])
 
-function App() {
+  useEffect(() => {
+    const firestore = getFirestore(firebase) // Siirretään firestore tähän
 
-  const [data, setData] = useLocalStorage('urheilu-data',[])
-  const [typelist, setTypelist] = useLocalStorage('urheilu-typelist',[])
+    const unsubscribe = onSnapshot(collection(firestore, 'item'), (snapshot) => {
+      const newData = snapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }))
+      setData([...newData]) // Varmistetaan, että päivitetään uuteen taulukkoon
+    })
 
+    return () => unsubscribe()
+  }, []) // Tyhjä riippuvuuslista, koska firestore ei muutu
 
-  
   const handleTypeSubmit = (type) => {
-    let copy = typelist.slice()
-    copy.push(type)
-    copy.sort()
+    const copy = [...typelist, type].sort()
     setTypelist(copy)
   }
 
   const handleItemDelete = (id) => {
-    let copy = data.slice()
-    copy = copy.filter(item => item.id !== id)
-    setData(copy)
+    const copy = data.filter((item) => item.id !== id)
+    setData([...copy]) // Varmistetaan uusi taulukko
   }
 
   const handleItemSubmit = (newitem) => {
-    let copy = data.slice()
+    const copy = [...data]
+    const index = copy.findIndex((item) => item.id === newitem.id)
 
-    const index = copy.findIndex(item => item.id === newitem.id)
     if (index >= 0) {
       copy[index] = newitem
     } else {
       copy.push(newitem)
     }
 
-    copy.sort((a, b) => {
-      const aDate = new Date(a.Date)
-      const bDate = new Date(b.Date)
-      return bDate - aDate
-    })
-    setData(copy)
+    copy.sort((a, b) => new Date(b.Date) - new Date(a.Date))
+    setData([...copy]) // Uusi taulukko Reactin tilapäivityksen varmistamiseksi
   }
 
   return (
-    <>
-      <AppRouter 
-        data={data} 
-        typelist={typelist} 
-        onItemSubmit={handleItemSubmit} 
-        onItemDelete={handleItemDelete} 
-        onTypeSubmit={handleTypeSubmit} 
-      />
-    </>
+    <AppRouter 
+      data={data} 
+      typelist={typelist} 
+      onItemSubmit={handleItemSubmit} 
+      onItemDelete={handleItemDelete} 
+      onTypeSubmit={handleTypeSubmit} 
+    />
   )
 }
 
 export default App
-
