@@ -1,5 +1,7 @@
 import styles from './Settings.module.scss'
 import Button from '../../shared/buttons'
+import { signOut } from 'firebase/auth'
+
 
 
 function Settings(props) {
@@ -11,11 +13,27 @@ function Settings(props) {
     event.target.elements.type.value = ''
   }
 
+  const logout = () => {
+    signOut(props.auth)
+  }
+
 
 
   return (
     <div className={styles.settings}>
       <h2>Lisää listalle uusia</h2>
+      <h3>Profiili</h3>
+      <div className={styles.settings_profile}>
+        <div className={styles.settings_user}>
+          <div><img src={props.user.photoURL} /></div>
+          <div>{props.user.displayName}<br />
+               {props.user.email}</div>
+        </div>
+        <div>
+        <Button primary onClick={logout}>Kirjaudu ulos</Button>
+        </div>
+      </div>
+
       <h3>✦ Urheilutyyppejä ✦</h3>
       <div className={styles.settings_types}>
         { props.typelist.map(

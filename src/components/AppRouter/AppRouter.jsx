@@ -27,7 +27,7 @@ function AppRouter(props) {
           path: "edit/:id", 
           element: <EditItem onItemSubmit={props.onItemSubmit} onItemDelete={props.onItemDelete} typelist={props.typelist} />,
           loader: ({params}) => {
-            const item = props.data.filter(item => item.id === params.id).shift();
+            const item = props.data.find(item => item.id === params.id); // Etsitään item id:n mukaan
             if (item) {
               return { item };
             } else {
@@ -41,7 +41,12 @@ function AppRouter(props) {
         },
         { 
           path: "settings", 
-          element: <Settings typelist={props.typelist} onTypeSubmit={props.onTypeSubmit} /> 
+          element: <Settings 
+                    typelist={props.typelist} 
+                    onTypeSubmit={props.onTypeSubmit} 
+                    user={props.user} 
+                    auth={props.auth} 
+                  />
         }
       ]
     }
@@ -53,4 +58,5 @@ function AppRouter(props) {
 }
 
 export default AppRouter;
+
 

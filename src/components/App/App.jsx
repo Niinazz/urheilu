@@ -4,7 +4,10 @@ import useLocalStorage from '../../shared/uselocalstorage'
 import firebase, { auth } from './firebase.js'
 import { addDoc, collection, deleteDoc, doc, getFirestore, onSnapshot, orderBy, query } from 'firebase/firestore'
 import { onAuthStateChanged } from 'firebase/auth'
-import Startup from '../Startup'
+import Startup from "../Startup";
+
+
+
 
 const App = () => {
   const [data, setData] = useLocalStorage('urheilu-data', [])
@@ -60,7 +63,8 @@ const App = () => {
           onItemSubmit={handleItemSubmit}
           onItemDelete={handleItemDelete}
           onTypeSubmit={handleTypeSubmit}
-        />
+                     auth={auth}
+                     user={user} />
       ) : (
         <Startup auth={auth} />
       )}
