@@ -2,7 +2,8 @@ import AppRouter from '../AppRouter'
 import { useEffect } from 'react'
 import useLocalStorage from '../../shared/uselocalstorage'
 import firebase from './firebase.js'
-import { collection, getFirestore, onSnapshot } from 'firebase/firestore'
+import { collection, deleteDoc, doc, getFirestore, onSnapshot, setDoc  } from 'firebase/firestore'
+
 
 const App = () => {
   const [data, setData] = useLocalStorage('urheilu-data', [])
@@ -27,10 +28,10 @@ const App = () => {
     setTypelist(copy)
   }
 
-  const handleItemDelete = (id) => {
-    const copy = data.filter((item) => item.id !== id)
-    setData([...copy]) // Varmistetaan uusi taulukko
+  const handleItemDelete = async (id) => {
+    await deleteDoc(doc(firestore, 'item', id))
   }
+
 
   const handleItemSubmit = (newitem) => {
     const copy = [...data]
