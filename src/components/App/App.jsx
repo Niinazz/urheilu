@@ -1,29 +1,25 @@
 import AppRouter from '../AppRouter'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'  // Tuodaan useState
 import useLocalStorage from '../../shared/uselocalstorage'
-import firebase from './firebase.js'
+import firebase, { auth } from './firebase.js'
 import { addDoc, collection, deleteDoc, doc, getFirestore, onSnapshot, orderBy, query } from 'firebase/firestore'
+import { onAuthStateChanged } from 'firebase/auth'
+import Startup from '../Startup'
 
 const App = () => {
   const [data, setData] = useLocalStorage('urheilu-data', [])
   const [typelist, setTypelist] = useLocalStorage('urheilu-typelist', [])
+  const [user, setUser] = useState(null)  // Määritellään user-tila
 
   const firestore = getFirestore(firebase)  // Määritellään firestore täällä
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(
-      query(collection(firestore, 'type'), orderBy('type')),
-      (snapshot) => {
-        const newTypelist = []
-        snapshot.forEach((doc) => {
-          newTypelist.push(doc.data().type)
-        })
-        setTypelist(newTypelist)
-      }
-    )
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user)
+    })
 
-    return unsubscribe  // Palautetaan unsubscribe, jotta se puhdistuu, kun komponentti poistuu
-  }, [firestore])  // `firestore` lisätään riippuvuuksiin
+    return () => unsubscribe()  // Palautetaan unsubscribe, jotta se puhdistuu, kun komponentti poistuu
+  }, [])  // Tyhjä riippuvuuslista
 
   const handleTypeSubmit = async (type) => {
     try {
@@ -56,15 +52,22 @@ const App = () => {
   }
 
   return (
-    <AppRouter 
-      data={data} 
-      typelist={typelist} 
-      onItemSubmit={handleItemSubmit} 
-      onItemDelete={handleItemDelete} 
-      onTypeSubmit={handleTypeSubmit} 
-    />
+    <>
+      {user ? (
+        <AppRouter
+          data={data}
+          typelist={typelist}
+          onItemSubmit={handleItemSubmit}
+          onItemDelete={handleItemDelete}
+          onTypeSubmit={handleTypeSubmit}
+        />
+      ) : (
+        <Startup auth={auth} />
+      )}
+    </>
   )
 }
 
 export default App
+
 
