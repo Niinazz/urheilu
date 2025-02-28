@@ -6,13 +6,13 @@ function Stats(props) {
   const { data } = props;
   const locale = "fi-FI";
 
-  // Linedata
+  // Linedata. Jokainen data-taulukon alkio (item) muunnetaan uuteen muotoon. Jokaisesta palautetaan date, duration
   const linedata = data ? data.map((item) => ({
     date: new Date(item.Date).getTime(),
     duration: item.duration || item.amount,
   })) : [];
 
-  // Lajit ja niiden määrät, joita käytetään ympyräkaaviossa
+  // Lajit ja niiden määrät, joita käytetään ympyräkaaviossa. item.type, eli urheilun tyyppi. Jos type on jo olemassa acc-objektissa, kasvatetaan laskuria yhdellä. Lopuksi palautetaan acc, joka sisältää urheilutyyppien lukumäärät. 
   const sportTypes = data ? data.reduce((acc, item) => {
     const type = item.type;
     if (acc[type]) {
@@ -23,18 +23,21 @@ function Stats(props) {
     return acc;
   }, {}) : {};
 
+  // ympyräkaavio, joka näyttää urheilutyypit 
   const pieData = Object.keys(sportTypes).map((type) => ({
     name: type,
     value: sportTypes[type],
   }));
 
-  // Lasketaan kaikkien suoritusten yhteiset minuutit
+  // Lasketaan kaikkien suoritusten yhteiset minuutit. Data-taulukon alkioiden kokonaiskesto (totalMinutes), eli summataan yhteen duration-arvot. 
+  // reduce () käy läpi data-taulukon ja laskee yhteen duration arvot, acc-akkumulaattori pitää kirjaa summasta. 
+  //jokaisella iteraatiolla lisätään duration akkumulaattoriin. 
   const totalMinutes = data.reduce((acc, item) => {
     const duration = item.duration || item.amount;
     return acc + duration;
   }, 0);
 
-  // Asetetaan yhteinen minuuttiluku toinen ympyräkaavio
+  // Asetetaan yhteinen minuuttiluku toiseen ympyräkaavioon
   const totalMinutesData = [{
     name: "Kaikki suoritukset",
     value: totalMinutes,
@@ -51,17 +54,19 @@ function Stats(props) {
     luminosity: 'light',  // Pastellivärit toiselle diagrammille
   });
 
-  // Formatteri minuutteja ja tunteja varten
+  // Formatteri minuutteja ja tunteja varten. style: unit, yksikkötyyli, jolloin luvun yhteyteen lisätään yksikkö.
+  // unit:minute, asetetaan yksiköt minuuteiksi. 
   const minuteFormatter = new Intl.NumberFormat('fi', {
     style: 'unit',
     unit: 'minute',
   });
-
+// Sama mutta muotoilu,mutta tunneiksi. 
   const hourFormatter = new Intl.NumberFormat('fi', {
     style: 'unit',
     unit: 'hour',
   });
 
+  //Funktio muuntaa minuuttimäärän tunneiksi ja minuuteiksi. 
   const formatDuration = (durationInMinutes) => {
     const hours = Math.floor(durationInMinutes / 60);
     const minutes = durationInMinutes % 60;
@@ -136,7 +141,7 @@ function Stats(props) {
       </ResponsiveContainer>
 
       
-      <h3 className={styles.pieTitle}>✦ Urheiluun käyttämäsi aika yhteensä ✦</h3>
+      <h3 className={styles.pieTitle}>✦ Urheiluun käyttämäsi aika kuukauden sisään yhteensä ✦</h3>
       <ResponsiveContainer width="100%" height={300} className={styles.pieChart}>
         <PieChart>
           <Pie
