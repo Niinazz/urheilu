@@ -9,49 +9,49 @@ function ItemForm(props) {
   // Funktio, joka määrittää kuukauden alku- ja loppupäivät
   const getMonthStartAndEndDates = () => {
     const now = new Date();
-    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1); // Kuukauden ensimmäinen päivä
-    const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0); // Kuukauden viimeinen päivä
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 
     return {
-      monthStart: monthStart.toISOString().split("T")[0], // Muutetaan muodoksi YYYY-MM-DD
-      monthEnd: monthEnd.toISOString().split("T")[0] // Muutetaan muodoksi YYYY-MM-DD
+      monthStart: monthStart.toISOString().split("T")[0],
+      monthEnd: monthEnd.toISOString().split("T")[0]
     };
   }
 
-  // Määritetään kuukauden alku ja loppu, jos niitä ei ole annettu lomakkeelle
   const { monthStart, monthEnd } = getMonthStartAndEndDates();
 
-  // Lomakkeen lähetyksen käsittelijä
   const submit = () => {
-    let storedValues = Object.assign({}, values)
-    storedValues.amount = parseFloat(storedValues.amount)  // Tämä kenttä voidaan poistaa, jos et halua sitä.
-    storedValues.id = storedValues.id ? storedValues.id : crypto.randomUUID()
-    storedValues.duration = parseFloat(storedValues.duration) || 0;  // Tallennetaan kesto (minuuteissa)
-    storedValues.periodStart = storedValues.periodStart || monthStart;  // Käytetään automaattisesti kuukauden alkupäivää, jos kenttä on tyhjä
-    storedValues.periodEnd = storedValues.periodEnd || monthEnd;  // Käytetään automaattisesti kuukauden loppupäivää, jos kenttä on tyhjä
-    props.onItemSubmit(storedValues)
-    navigate(-1)
+    let storedValues = { ...values };
+    storedValues.amount = parseFloat(storedValues.amount) || 0;
+    storedValues.id = storedValues.id ? storedValues.id : crypto.randomUUID();
+    storedValues.duration = parseFloat(storedValues.duration) || 0;
+    storedValues.Date = storedValues.Date ? new Date(storedValues.Date) : new Date();
+    storedValues.periodStart = storedValues.periodStart || monthStart;
+    storedValues.periodEnd = storedValues.periodEnd || monthEnd;
+    
+    props.onItemSubmit(storedValues);
+    navigate(-1);
   }
 
   const initialState = props.formData ? props.formData : {
     type: "",
-    amount: 0,  // Tämä kenttä voidaan poistaa, jos et halua sitä.
+    amount: 0,
     Date: "",
-    duration: "", // Suorituksen kesto
-    periodStart: monthStart, // Alkuperäinen kuukausi
-    periodEnd: monthEnd // Loppukuukausi
+    duration: "",
+    periodStart: monthStart,
+    periodEnd: monthEnd
   }
 
-  const { values, handleChange, handleSubmit } = useForm(submit, initialState, false)
+  const { values, handleChange, handleSubmit } = useForm(submit, initialState, false);
 
-  const handleCancel = () => {
-    navigate('/')
-  }
+  const handleCancel = () => navigate('/');
 
   const handleDelete = () => {
-    props.onItemDelete(values.id)
-    navigate(-1)
-  }
+    if (props.onItemDelete) {
+      props.onItemDelete(values.id);
+      navigate(-1);
+    }
+  };
 
   return (
     <div>
@@ -62,9 +62,9 @@ function ItemForm(props) {
               <label htmlFor='type'>Urheilutyyppi</label>
               <select name='type' onChange={handleChange} value={values.type}>
                 <option value="">(valitse)</option>
-                {props.typelist.map(
-                  type => <option key={type}>{type}</option>
-                )}
+                {props.typelist.map((type) => (
+                  <option key={type} value={type}>{type}</option>
+                ))}
               </select>
             </div>
           </div>
@@ -76,7 +76,7 @@ function ItemForm(props) {
                 name='duration'
                 step='1'
                 onChange={handleChange}
-                value={values.duration} // Arvo sidotaan durationiin
+                value={values.duration}
               />
             </div>
             <div>
@@ -96,7 +96,7 @@ function ItemForm(props) {
                 type='date'
                 name='periodStart'
                 onChange={handleChange}
-                value={values.periodStart} // Tämä kenttä käyttää automaattisesti kuukauden alkua
+                value={values.periodStart}
               />
             </div>
             <div>
@@ -105,7 +105,7 @@ function ItemForm(props) {
                 type='date'
                 name='periodEnd'
                 onChange={handleChange}
-                value={values.periodEnd} // Tämä kenttä käyttää automaattisesti kuukauden loppua
+                value={values.periodEnd}
               />
             </div>
           </div>
@@ -116,26 +116,27 @@ function ItemForm(props) {
             <div>
               <Button
                 primary
-                disabled={values.type && values.duration && values.Date ? "" : "disabled"}
+                disabled={!(values.type && values.duration && values.Date)}
                 type='submit'
               >
                 {props.formData ? "TALLENNA" : "LISÄÄ"}
               </Button>
             </div>
           </div>
-          {props.onItemDelete ? (
+          {props.onItemDelete && (
             <div className={styles.itemform_row}>
               <div>
                 <Button secondary onClick={handleDelete}>POISTA</Button>
               </div>
             </div>
-          ) : null}
+          )}
         </div>
       </form>
     </div>
   )
 }
 
-export default ItemForm
+export default ItemForm;
+
 
 
