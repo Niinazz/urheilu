@@ -2,26 +2,24 @@ import AppRouter from '../AppRouter'
 import { useEffect, useState } from 'react'
 import useLocalStorage from '../../shared/uselocalstorage'
 import firebase, { auth } from './firebase.js'
-import { 
-  addDoc, collection, deleteDoc, doc, getFirestore, 
-  onSnapshot, orderBy, query, setDoc 
-} from 'firebase/firestore'
+import { addDoc, collection, deleteDoc, doc, getFirestore, onSnapshot, orderBy, query, setDoc } from 'firebase/firestore'
 import { onAuthStateChanged } from 'firebase/auth'
 import Startup from "../Startup";
 
 const App = () => {
+  // Tilat urheilusuorituksille ja urheilutyypeille
   const [data, setData] = useLocalStorage('urheilu-data', [])
   const [typelist, setTypelist] = useLocalStorage('urheilu-typelist', [])
   const [user, setUser] = useState(null)
 
   const firestore = getFirestore(firebase)
 
-  // Käyttäjän tilan seuranta
+  // Käyttäjän tilan seuranta (autentikointi)
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user)
     })
-    return () => unsubscribe() // Cleanup unsubscribe
+    return () => unsubscribe() // Cleanup autentikoinnin tilan seuranta
   }, [])
 
   // Haetaan käyttäjän urheilusuoritukset Firestoresta
@@ -94,6 +92,7 @@ const App = () => {
     }
   }
 
+  // Käyttäjä kirjautunut sisään? Jos ei, näyttää Startup-komponentin
   return (
     <>
       {user ? (
