@@ -8,8 +8,8 @@ function AddItem(props) {
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
     const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0); // Tämän kuukauden viimeinen päivä
     return {
-      startOfMonth,
-      endOfMonth
+      startOfMonth: startOfMonth.toISOString().split("T")[0],  // Muutetaan muotoon YYYY-MM-DD
+      endOfMonth: endOfMonth.toISOString().split("T")[0] // Muutetaan muotoon YYYY-MM-DD
     }
   };
 
@@ -28,4 +28,5 @@ function AddItem(props) {
   )
 }
 
-export default AddItem
+export default AddItem;
+
