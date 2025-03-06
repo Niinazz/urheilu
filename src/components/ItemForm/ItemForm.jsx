@@ -61,7 +61,7 @@ function ItemForm(props) {
           <div className={styles.itemform_row}>
             <div>
               <label htmlFor='type'>Urheilutyyppi</label>
-              <select name='type' onChange={handleChange} value={values.type}>
+              <select id='type' name='type' onChange={handleChange} value={values.type}>
                 <option value="">(valitse)</option>
                 {props.typelist.map((type) => (
                   <option key={type} value={type}>{type}</option>
@@ -73,6 +73,7 @@ function ItemForm(props) {
             <div>
               <label htmlFor='duration'>Suorituksen kesto (minuuteissa)</label>
               <input
+                id='duration'
                 type='number'
                 name='duration'
                 step='1'
@@ -81,12 +82,13 @@ function ItemForm(props) {
               />
             </div>
             <div>
-              <label htmlFor='Date'>Urheilupäivä</label>
+              <label htmlFor='sportDate'>Urheilupäivä</label>
               <input
+                id='sportDate'
                 type='date'
-                name='Date'
+                name='sportDate'
                 onChange={handleChange}
-                value={values.Date}
+                value={values.sportDate}
               />
             </div>
           </div>
@@ -94,6 +96,7 @@ function ItemForm(props) {
             <div>
               <label htmlFor='periodStart'>Urheilukuukauden alku</label>
               <input
+                id='periodStart'
                 type='date'
                 name='periodStart'
                 onChange={handleChange}
@@ -103,6 +106,7 @@ function ItemForm(props) {
             <div>
               <label htmlFor='periodEnd'>Urheilukuukauden loppu</label>
               <input
+                id='periodEnd'
                 type='date'
                 name='periodEnd'
                 onChange={handleChange}
@@ -117,7 +121,7 @@ function ItemForm(props) {
             <div>
               <Button
                 primary
-                disabled={!(values.type && values.duration && values.Date)}
+                disabled={!(values.type && values.duration && values.sportDate)}
                 type='submit'
               >
                 {props.formData ? "TALLENNA" : "LISÄÄ"}
@@ -138,6 +142,7 @@ function ItemForm(props) {
 }
 
 export default ItemForm;
+
 
 
 
