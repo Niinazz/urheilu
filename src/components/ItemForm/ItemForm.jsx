@@ -6,43 +6,35 @@ import { useNavigate } from 'react-router-dom'
 function ItemForm(props) {
   const navigate = useNavigate()
 
-  // Funktio, joka määrittää kuukauden alku- ja loppupäivät
   const getMonthStartAndEndDates = () => {
     const now = new Date();
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
     const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
     return {
-      monthStart: monthStart.toISOString().split("T")[0], // Muutetaan muotoon YYYY-MM-DD
-      monthEnd: monthEnd.toISOString().split("T")[0] // Muutetaan muotoon YYYY-MM-DD
+      monthStart: monthStart.toISOString().split("T")[0],
+      monthEnd: monthEnd.toISOString().split("T")[0]
     };
   }
 
   const { monthStart, monthEnd } = getMonthStartAndEndDates();
 
-  // Lomakkeen lähetyksen käsittelijä
   const submit = () => {
     let storedValues = { ...values };
-    
-    // Muutetaan amount ja duration lukuiksi
+
     storedValues.amount = parseFloat(storedValues.amount) || 0;
     storedValues.duration = parseFloat(storedValues.duration) || 0;
 
-    // Jos Date on tyhjä, aseta se nykyiseksi päivämääräksi (ISO 8601 formaatti)
     storedValues.Date = storedValues.Date ? storedValues.Date : new Date().toISOString().split("T")[0];
-
-    // Jos periodStart ja periodEnd ovat tyhjiä, käytä oletusarvoja
     storedValues.periodStart = storedValues.periodStart || monthStart;
     storedValues.periodEnd = storedValues.periodEnd || monthEnd;
 
-    // Jos ID:tä ei ole, luo uusi UUID
     storedValues.id = storedValues.id || crypto.randomUUID();
 
-    // Lähetetään tiedot lomakkeen yläpuolelle
     props.onItemSubmit(storedValues);
     navigate(-1);
   }
 
-  const initialState = props.formData ? props.formData : {
+  const initialState = props.formData || {
     type: "",
     amount: 0,
     Date: "",
@@ -146,6 +138,7 @@ function ItemForm(props) {
 }
 
 export default ItemForm;
+
 
 
 

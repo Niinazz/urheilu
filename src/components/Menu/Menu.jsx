@@ -9,21 +9,21 @@ function Menu() {
     <div className={styles.menu}>
       {/* Tämä vie etusivulle */}
       <div>
-        <NavLink to="/" activeClassName={styles.active}>
+        <NavLink to="/" className={({ isActive }) => isActive ? styles.active : ""}>
           <TbAdjustmentsHeart />
         </NavLink>
       </div>
 
       {/* Tämä vie tilastojen sivulle */}
       <div>
-        <NavLink to="/stats" activeClassName={styles.active}>
+        <NavLink to="/stats" className={({ isActive }) => isActive ? styles.active : ""}>
           <IoStatsChart />
         </NavLink>
       </div>
 
       {/* Tämä vie asetussivulle */}
       <div>
-        <NavLink to="/settings" activeClassName={styles.active}>
+        <NavLink to="/settings" className={({ isActive }) => isActive ? styles.active : ""}>
           <MdSettingsSuggest />
         </NavLink>
       </div>
@@ -32,4 +32,5 @@ function Menu() {
 }
 
 export default Menu;
+
 

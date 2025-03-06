@@ -7,7 +7,6 @@ import { onAuthStateChanged } from 'firebase/auth'
 import Startup from "../Startup";
 
 const App = () => {
-  // Tilat urheilusuorituksille ja urheilutyypeille
   const [data, setData] = useLocalStorage('urheilu-data', [])
   const [typelist, setTypelist] = useLocalStorage('urheilu-typelist', [])
   const [user, setUser] = useState(null)
@@ -19,7 +18,7 @@ const App = () => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user)
     })
-    return () => unsubscribe() // Cleanup autentikoinnin tilan seuranta
+    return () => unsubscribe()  // Peruutetaan kuuntelija, kun komponentti poistuu
   }, [])
 
   // Haetaan käyttäjän urheilusuoritukset Firestoresta
@@ -36,11 +35,12 @@ const App = () => {
         },
         (error) => console.error("Error fetching items:", error)
       )
-      return () => unsubscribe() // Cleanup
+
+      return () => unsubscribe()  // Peruutetaan kuuntelija, kun riippuvuus muuttuu (esim. user)
     } else {
-      setData([])
+      setData([])  // Jos ei ole käyttäjää, tyhjennä data
     }
-  }, [user, firestore])
+  }, [user, firestore])  // Huomioi myös `firestore` riippuvuus, vaikka se ei muutu
 
   // Haetaan käyttäjän urheilutyypit Firestoresta
   useEffect(() => {
@@ -53,20 +53,22 @@ const App = () => {
         },
         (error) => console.error("Error fetching types:", error)
       )
-      return () => unsubscribe() // Cleanup
+      return () => unsubscribe()  // Peruutetaan kuuntelija, kun riippuvuus muuttuu
     } else {
-      setTypelist([])
+      setTypelist([])  // Jos ei ole käyttäjää, tyhjennä typelist
     }
-  }, [user, firestore])
+  }, [user, firestore])  // Huomioi myös `firestore` riippuvuus
 
-  // Urheilutyypin lisääminen Firestoreen
+  // Urheilutyypin lisääminen Firestoreen ilman duplikaatteja
   const handleTypeSubmit = async (newType) => {
-    if (user) {
+    if (user && newType && !typelist.includes(newType)) {
       try {
         await addDoc(collection(firestore, `user/${user.uid}/type`), { type: newType })
       } catch (error) {
         console.error('Virhe tyypin lisäämisessä:', error)
       }
+    } else {
+      alert('Urheilutyyppi on jo listalla tai tyhjä!')
     }
   }
 
@@ -81,11 +83,12 @@ const App = () => {
     }
   }
 
-  // Urheilusuorituksen lisääminen / päivittäminen Firestoreen
+  // Urheilusuorituksen lisääminen/päivittäminen Firestoreen
   const handleItemSubmit = async (newItem) => {
     if (user) {
       try {
-        await setDoc(doc(firestore, `user/${user.uid}/item`, newItem.id), newItem)
+        const itemRef = doc(firestore, `user/${user.uid}/item`, newItem.id)
+        await setDoc(itemRef, newItem)
       } catch (error) {
         console.error("Error saving item:", error)
       }
@@ -113,5 +116,6 @@ const App = () => {
 }
 
 export default App
+
 
 

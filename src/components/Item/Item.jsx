@@ -6,32 +6,14 @@ function Item({ data, ...props }) {
   const locale = "fi-FI"
   const sportDate = new Date(data.Date).toLocaleDateString(locale)
 
-  const numberFormat = new Intl.NumberFormat('fi-FI');
-  const minuteFormatter = new Intl.NumberFormat('fi', {
-    style: 'unit',
-    unit: 'minute',
-  });
-
-  const hourFormatter = new Intl.NumberFormat('fi', {
-    style: 'unit',
-    unit: 'hour',
-  });
-
   let duration;
-  
+
   // Käytetään pelkkää duration-arvoa, ei aikaväliä
   if (data.duration) {
     const durationInMinutes = data.duration;  // Suorituksen kesto minuutteina
 
-    const hours = Math.floor(durationInMinutes / 60);  // Täydet tunnit
-    const minutes = durationInMinutes % 60;  // Jäljelle jäävät minuutit
-
-    // Näytetään tunnit ja minuutit
-    if (durationInMinutes >= 60) {
-      duration = `${hourFormatter.format(hours)} tuntia ${minuteFormatter.format(minutes)} minuuttia`;
-    } else {
-      duration = `${minuteFormatter.format(durationInMinutes)} minuuttia`;
-    }
+    // Näytetään pelkät minuutit ilman lisäyksiä
+    duration = durationInMinutes;
   }
 
   return (
@@ -42,7 +24,7 @@ function Item({ data, ...props }) {
           <div className={styles.date_header}>Suorituspäivä</div>
           <div>{sportDate}</div>
         </div>
-        <div className={styles.item_duration}>{duration}</div> {/* Kesto näyttöön */}
+        <div className={styles.item_duration}>{duration} minuuttia</div> {/* Kesto yksinkertaisena */}
       </div>
       <div className={styles.item_edit}>
         <Link to={"/edit/" + data.id}><MdNavigateNext /></Link>
@@ -52,3 +34,4 @@ function Item({ data, ...props }) {
 }
 
 export default Item
+
