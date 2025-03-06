@@ -1,36 +1,34 @@
-import styles from './Startup.module.scss'
-import Button from '../../shared/buttons'
-import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
+import styles from './Startup.module.scss';
+import Button from '../../shared/buttons'; // Oletetaan, että Button-komponentti käyttää omaa buttons.scss-tyyliä
+import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 
-function Startup (props) {
-
-  // Luodaan yhteys Googlen kirjautumiseen.
-  const google = new GoogleAuthProvider()
-
-  // Käyttäjä valitsee kirjautumisessa tilin,
-  // jolla kirjautuu.
+function Startup(props) {
+  const google = new GoogleAuthProvider();
   google.setCustomParameters({
-    prompt : 'select_account '
-  })
+    prompt: 'select_account'
+  });
 
-  // Kytketään Google-kirjautuminen popup-kirjautumiseen.
-  const signInWithGooglePopup = () => signInWithPopup(props.auth, google)
+  const signInWithGooglePopup = () => signInWithPopup(props.auth, google);
 
-  // Kirjautumisnapin käsitelijä, jossa kutsutaan auth-palvelun
-  // popup-kirjautumiskäsittelijää, joka on kytketty Googlen
-  // kirjautumiseen.
   const signInGoogle = async () => {
-    await signInWithGooglePopup()
-  }
+    await signInWithGooglePopup();
+  };
+
+  const handleContinueWithoutLogin = () => {
+    // Toiminto ilman kirjautumista
+  };
 
   return (
     <div className={styles.startup}>
       <h1>Urheilupäiväkirja</h1>
       <div>Moi! Tervetuloa käyttämään urheilupäiväkirjaa, mihin voit kirjata kaikki tekemäsi 
         urheilusuoritukset!</div>
-      <Button onClick={signInGoogle}>Kirjaudu Google-tunnuksilla sisään!</Button>
+      <Button className="button_google-login" onClick={signInGoogle}>Kirjaudu Google-tunnuksilla sisään!</Button>
+      <Button className="button_no-login" onClick={handleContinueWithoutLogin}>Käytä ilman kirjautumista</Button>
     </div>
-  )
+  );
 }
 
-export default Startup
+export default Startup;
+
+

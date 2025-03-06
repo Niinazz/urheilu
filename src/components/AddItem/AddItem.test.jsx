@@ -38,8 +38,8 @@ describe('AddItem', () => {
     // Syötetään kesto ja tarkistetaan, että
     //  - kentän arvo on sama kuin syötetty arvo ja 
     //  - lisäysnappi on disabloitu.
-    await user.type(screen.getByLabelText('duration'), formdata.amount.toString())
-    expect(screen.getByLabelText('duration')).toHaveValue(formdata.amount)
+    await user.type(screen.getByLabelText('amount'), formdata.amount.toString())
+    expect(screen.getByLabelText('amount')).toHaveValue(formdata.amount)
     expect(screen.getByRole('button', {name: 'LISÄÄ'}).disabled).toBe(true)
     
 

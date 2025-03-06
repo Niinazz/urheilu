@@ -30,4 +30,10 @@
       color: rgb(255, 27, 217);
     }
   }
+
+  .active {
+    color: #f527c8;  /* Tämä voi olla mikä tahansa väri, joka haluat aktiiviselle napille */
+    font-weight: bold;  /* Lisätyylit, kuten lihavointi, voivat auttaa korostamaan aktiivista linkkiä */
+  }
+  
   
