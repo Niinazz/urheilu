@@ -34,6 +34,8 @@
     "jsdom": "^22.1.0",
     "sass": "^1.66.1",
     "vite": "^4.4.5",
-    "vitest": "^0.34.6"
+    "vite-plugin-pwa": "^0.16.7",
+    "vitest": "^0.34.6",
+    "workbox-window": "^7.0.0"
   }
 }

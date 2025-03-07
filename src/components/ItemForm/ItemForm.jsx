@@ -24,7 +24,7 @@ function ItemForm(props) {
     storedValues.amount = parseFloat(storedValues.amount) || 0;
     storedValues.duration = parseFloat(storedValues.duration) || 0;
 
-    storedValues.Date = storedValues.Date ? storedValues.Date : new Date().toISOString().split("T")[0];
+    storedValues.Date = storedValues.sportDate ? storedValues.sportDate : new Date().toISOString().split("T")[0];
     storedValues.periodStart = storedValues.periodStart || monthStart;
     storedValues.periodEnd = storedValues.periodEnd || monthEnd;
 

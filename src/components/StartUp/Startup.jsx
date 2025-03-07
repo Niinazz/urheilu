@@ -14,9 +14,7 @@ function Startup(props) {
     await signInWithGooglePopup();
   };
 
-  const handleContinueWithoutLogin = () => {
-    // Toiminto ilman kirjautumista
-  };
+ 
 
   return (
     <div className={styles.startup}>
@@ -24,7 +22,7 @@ function Startup(props) {
       <div>Moi! Tervetuloa käyttämään urheilupäiväkirjaa, mihin voit kirjata kaikki tekemäsi 
         urheilusuoritukset!</div>
       <Button className="button_google-login" onClick={signInGoogle}>Kirjaudu Google-tunnuksilla sisään!</Button>
-      <Button className="button_no-login" onClick={handleContinueWithoutLogin}>Käytä ilman kirjautumista</Button>
+  
     </div>
   );
 }

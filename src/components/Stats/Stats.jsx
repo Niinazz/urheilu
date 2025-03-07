@@ -143,27 +143,40 @@ function Stats(props) {
       
       <h3 className={styles.pieTitle}>✦ Urheiluun käyttämäsi aika kuukauden sisään yhteensä ✦</h3>
       <ResponsiveContainer width="100%" height={300} className={styles.pieChart}>
-        <PieChart>
-          <Pie
-            data={totalMinutesData}
-            dataKey="value"
-            nameKey="name"
-            outerRadius={100}
-            fill="#8884d8"
-            label
-          >
-           
-            {pastelPieColors.map((color, index) => (
-              <Cell key={color} fill={color} />
-            ))}
-          </Pie>
-          <Legend />
-          <Tooltip
-            labelFormatter={(value) => value}  // Näyttää nimikentän (esim. "Kaikki suoritukset")
-            formatter={(value) => [`Yhteensä: ${value} minuuttia`]}  // Näytetään yhteinen minuuttiluku
-          />
-        </PieChart>
-      </ResponsiveContainer>
+  <PieChart>
+    <Pie
+      data={totalMinutesData}
+      dataKey="value"
+      nameKey="name"
+      outerRadius={100}
+      fill="#8884d8"
+      label
+    >
+      {pastelPieColors.map((color, index) => (
+        <Cell key={color} fill={color} />
+      ))}
+    </Pie>
+
+    {/* Keskelle teksti, joka näyttää käytetyt minuutit isoilla kirjaimilla */}
+    <text 
+      x="50%" 
+      y="50%" 
+      textAnchor="middle" 
+      dominantBaseline="middle" 
+      fontSize="24px" 
+      fontWeight="bold"
+      fill="#333"
+    >
+      {formatDuration(totalMinutes)}
+    </text>
+
+    <Legend />
+    <Tooltip
+      labelFormatter={(value) => value}  
+      formatter={(value) => [`Yhteensä: ${value} minuuttia`]}  
+    />
+  </PieChart>
+</ResponsiveContainer>
 
       {/* Lajit listattuna */}
       <div className={styles.listContainer}>

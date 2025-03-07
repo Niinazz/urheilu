@@ -1,0 +1,11 @@
+{
+    "name": "Urheilupäiväkirja",
+    "short_name": "Urheilu",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "orientation": "portrait",
+    "theme_color": "#e462f5",
+    "background_color": "#e462f5"
+  }
+  
