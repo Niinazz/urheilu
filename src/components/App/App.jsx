@@ -4,7 +4,8 @@ import useLocalStorage from '../../shared/uselocalstorage'
 import { firestore, auth } from './firebase.js'
 import { addDoc, collection, deleteDoc, doc, onSnapshot, orderBy, query, setDoc } from 'firebase/firestore'
 import { onAuthStateChanged } from 'firebase/auth'
-import Startup from "../Startup"
+import Startup from "../Startup/Startup"
+
 
 const App = () => {
   const [data, setData] = useLocalStorage('urheilu-data', [])
