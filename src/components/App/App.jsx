@@ -1,17 +1,17 @@
 import AppRouter from '../AppRouter'
 import { useEffect, useState } from 'react'
 import useLocalStorage from '../../shared/uselocalstorage'
-import firebase, { auth } from './firebase.js'
+import { firestore, auth } from './firebase.js'  // Tämä rivi on nyt oikein ilman kommenttia
 import { addDoc, collection, deleteDoc, doc, getFirestore, onSnapshot, orderBy, query, setDoc } from 'firebase/firestore'
 import { onAuthStateChanged } from 'firebase/auth'
 import Startup from "../Startup";
+
+
 
 const App = () => {
   const [data, setData] = useLocalStorage('urheilu-data', [])
   const [typelist, setTypelist] = useLocalStorage('urheilu-typelist', [])
   const [user, setUser] = useState(null)
-
-  const firestore = getFirestore(firebase)
 
   // Käyttäjän tilan seuranta (autentikointi)
   useEffect(() => {
@@ -116,6 +116,3 @@ const App = () => {
 }
 
 export default App
-
-
-

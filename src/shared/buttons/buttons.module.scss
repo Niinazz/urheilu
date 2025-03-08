@@ -1,4 +1,4 @@
-@import '../../assets/styles/_config.scss';
+@use '../../assets/styles/_config' as *;
 
 .button {
   background-color: $color-neutral-light;
@@ -17,15 +17,14 @@
 .button:hover {
   background-color: palevioletred; /* Vaihda taustaväri */
   box-shadow: 0px 4px 6px rgb(253, 0, 139); /* Lisää varjoa hover-tilassa */
-  transform: translateY(-2px); /* Liikuta nappia ylös hover-tilassa */
+  /* Poistettu transform-ominaisuus */
 }
-
 
 .button:active {
   background-color: $color-primary; /* Muuta väri aktiiviseksi */
   color: $color-neutral-lightest; /* Tekstin väri aktiivisessa tilassa */
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5); /* Lisää voimakas varjo */
-  transform: translateY(2px); /* Liikuta nappia alas painettaessa */
+  /* Poistettu transform-ominaisuus */
 }
 
 .button:disabled {

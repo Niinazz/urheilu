@@ -1,4 +1,4 @@
-@import '../../assets/styles/_config.scss';
+@use '../../assets/styles/_config' as *;
 
 .additem {
   padding: $container-padding;

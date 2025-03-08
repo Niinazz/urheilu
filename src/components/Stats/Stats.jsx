@@ -6,14 +6,28 @@ function Stats(props) {
   const { data } = props;
   const locale = "fi-FI";
 
+  // Suodatetaan vain suoritukset viimeisen kuukauden ajalta
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+  
+  const recentData = data ? data.filter(item => {
+    const itemDate = new Date(item.Date);
+    return itemDate >= thirtyDaysAgo; // Suodatetaan vain viimeiset 30 päivää
+  }) : [];
+
+  // Tarkistetaan, onko dataa jäljellä suodatuksen jälkeen
+  if (recentData.length === 0) {
+    return <div>Ei suorituksia viimeisen kuukauden aikana</div>;
+  }
+
   // Linedata. Jokainen data-taulukon alkio (item) muunnetaan uuteen muotoon. Jokaisesta palautetaan date, duration
-  const linedata = data ? data.map((item) => ({
+  const linedata = recentData.map((item) => ({
     date: new Date(item.Date).getTime(),
     duration: item.duration || item.amount,
-  })) : [];
+  }));
 
-  // Lajit ja niiden määrät, joita käytetään ympyräkaaviossa. item.type, eli urheilun tyyppi. Jos type on jo olemassa acc-objektissa, kasvatetaan laskuria yhdellä. Lopuksi palautetaan acc, joka sisältää urheilutyyppien lukumäärät. 
-  const sportTypes = data ? data.reduce((acc, item) => {
+  // Lajit ja niiden määrät, joita käytetään ympyräkaaviossa
+  const sportTypes = recentData.reduce((acc, item) => {
     const type = item.type;
     if (acc[type]) {
       acc[type] += 1;
@@ -21,29 +35,26 @@ function Stats(props) {
       acc[type] = 1;
     }
     return acc;
-  }, {}) : {};
+  }, {});
 
-  // ympyräkaavio, joka näyttää urheilutyypit 
+  // Ympyräkaavion data
   const pieData = Object.keys(sportTypes).map((type) => ({
     name: type,
     value: sportTypes[type],
   }));
 
-  // Lasketaan kaikkien suoritusten yhteiset minuutit. Data-taulukon alkioiden kokonaiskesto (totalMinutes), eli summataan yhteen duration-arvot. 
-  // reduce () käy läpi data-taulukon ja laskee yhteen duration arvot, acc-akkumulaattori pitää kirjaa summasta. 
-  //jokaisella iteraatiolla lisätään duration akkumulaattoriin. 
-  const totalMinutes = data.reduce((acc, item) => {
+  // Lasketaan kaikkien suoritusten yhteiset minuutit
+  const totalMinutes = recentData.reduce((acc, item) => {
     const duration = item.duration || item.amount;
     return acc + duration;
   }, 0);
 
-  // Asetetaan yhteinen minuuttiluku toiseen ympyräkaavioon
   const totalMinutesData = [{
     name: "Kaikki suoritukset",
     value: totalMinutes,
   }];
 
-  
+  // Värit kaavioille
   const pieColors = randomColor({
     count: pieData.length,
     luminosity: 'dark',  // Tummat värit ensimmäiselle diagrammille
@@ -54,19 +65,17 @@ function Stats(props) {
     luminosity: 'light',  // Pastellivärit toiselle diagrammille
   });
 
-  // Formatteri minuutteja ja tunteja varten. style: unit, yksikkötyyli, jolloin luvun yhteyteen lisätään yksikkö.
-  // unit:minute, asetetaan yksiköt minuuteiksi. 
+  // Formatteri minuutteja ja tunteja varten
   const minuteFormatter = new Intl.NumberFormat('fi', {
     style: 'unit',
     unit: 'minute',
   });
-// Sama mutta muotoilu,mutta tunneiksi. 
+
   const hourFormatter = new Intl.NumberFormat('fi', {
     style: 'unit',
     unit: 'hour',
   });
 
-  //Funktio muuntaa minuuttimäärän tunneiksi ja minuuteiksi. 
   const formatDuration = (durationInMinutes) => {
     const hours = Math.floor(durationInMinutes / 60);
     const minutes = durationInMinutes % 60;
@@ -140,53 +149,50 @@ function Stats(props) {
         </PieChart>
       </ResponsiveContainer>
 
-      
+      {/* Pie Chart for Total Time */}
       <h3 className={styles.pieTitle}>✦ Urheiluun käyttämäsi aika kuukauden sisään yhteensä ✦</h3>
       <ResponsiveContainer width="100%" height={300} className={styles.pieChart}>
-  <PieChart>
-    <Pie
-      data={totalMinutesData}
-      dataKey="value"
-      nameKey="name"
-      outerRadius={100}
-      fill="#8884d8"
-      label
-    >
-      {pastelPieColors.map((color, index) => (
-        <Cell key={color} fill={color} />
-      ))}
-    </Pie>
+        <PieChart>
+          <Pie
+            data={totalMinutesData}
+            dataKey="value"
+            nameKey="name"
+            outerRadius={100}
+            fill="#8884d8"
+            label
+          >
+            {pastelPieColors.map((color, index) => (
+              <Cell key={color} fill={color} />
+            ))}
+          </Pie>
 
-    {/* Keskelle teksti, joka näyttää käytetyt minuutit isoilla kirjaimilla */}
-    <text 
-      x="50%" 
-      y="50%" 
-      textAnchor="middle" 
-      dominantBaseline="middle" 
-      fontSize="24px" 
-      fontWeight="bold"
-      fill="#333"
-    >
-      {formatDuration(totalMinutes)}
-    </text>
+          {/* Keskelle teksti, joka näyttää käytetyt minuutit isoilla kirjaimilla */}
+          <text 
+            x="50%" 
+            y="50%" 
+            textAnchor="middle" 
+            dominantBaseline="middle" 
+            fontSize="24px" 
+            fontWeight="bold"
+            fill="#333"
+          >
+            {formatDuration(totalMinutes)}
+          </text>
 
-    <Legend />
-    <Tooltip
-      labelFormatter={(value) => value}  
-      formatter={(value) => [`Yhteensä: ${value} minuuttia`]}  
-    />
-  </PieChart>
-</ResponsiveContainer>
-
-      {/* Lajit listattuna */}
-      <div className={styles.listContainer}>
-        
-      </div>
+          <Legend />
+          <Tooltip
+            labelFormatter={(value) => value}  
+            formatter={(value) => [`Yhteensä: ${value} minuuttia`]}  
+          />
+        </PieChart>
+      </ResponsiveContainer>
     </div>
   );
 }
 
 export default Stats;
+
+
 
 
 
