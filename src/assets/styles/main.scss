@@ -22,9 +22,15 @@ html {
     height: auto;
   }
   
-  html {
-    background: url('/icons/cloudz.jpg') no-repeat center fixed;
+  body {
+    background-image: url('/icons/cloudz.jpg');  // 🔥 HUOM! Käytä suoraa polkua, koska kuva on public-kansiossa
     background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
   }
-  
   
