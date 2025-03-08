@@ -1,24 +1,29 @@
-import styles from './Settings.module.scss'
-import Button from '../../shared/buttons'
-import { signOut } from 'firebase/auth'
+import styles from './Settings.module.scss';
+import Button from '../../shared/buttons';
+import { signOut } from 'firebase/auth';
+import { useEffect } from 'react';
 
 function Settings(props) {
 
+  useEffect(() => {
+    console.log("⚙️ Settings-komponentin typelist päivitetty:", props.typelist);
+  }, [props.typelist]);
+
   const handleTypeSubmit = (event) => {
-    event.preventDefault()
-    const newType = event.target.elements.type.value
-    // Lähetetään uusi tyyppi App-komponenttiin, mutta ennen sitä tarkistetaan, ettei se ole jo listalla
-    if (!props.typelist.includes(newType) && newType.trim() !== "") {
-      props.onTypeSubmit(newType)
-      event.target.elements.type.value = ''
+    event.preventDefault();
+    const newType = event.target.elements.type.value.trim();
+    
+    if (newType !== "") {
+      props.onTypeSubmit(newType);
+      event.target.elements.type.value = '';
     } else {
-      alert('Urheilutyyppi on jo listalla tai tyhjä!')
+      alert('Urheilutyyppi ei voi olla tyhjä!');
     }
-  }
+  };
 
   const logout = () => {
-    signOut(props.auth)
-  }
+    signOut(props.auth);
+  };
 
   return (
     <div className={styles.settings}>
@@ -34,7 +39,7 @@ function Settings(props) {
         </div>
       </div>
 
-      <h3>Lisää listalle uusia✦Urheilutyyppejä✦</h3>
+      <h3>Lisää listalle uusia ✦ Urheilutyyppejä ✦</h3>
       <div className={styles.settings_types}>
         {props.typelist.length === 0 ? (
           <p>Ei urheilutyyppejä</p>
@@ -49,7 +54,7 @@ function Settings(props) {
         </form>
       </div>
     </div>
-  )
+  );
 }
 
 export default Settings;
